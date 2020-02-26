@@ -8,7 +8,6 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 public class PodManager {
 
-    private final static String MULTICAST_IP = "224.0.0.9";
     private static ThreadPoolExecutor executor;
     private RoutingTable routingTable;
     private DatagramSocket socket = null;
@@ -19,8 +18,6 @@ public class PodManager {
     public static void main(String[] args) throws IOException, InterruptedException {
         int podID = Integer.parseInt(args[0]);
         DataStore.setPodID(podID);
-
-        DataStore.setMulticastIP(MULTICAST_IP);
 
         String podIP = InetAddress.getLocalHost().getHostAddress().trim();
         DataStore.setPodIP(podIP);
@@ -34,12 +31,12 @@ public class PodManager {
 
         RoutingTable routingTable = new RoutingTable(new ArrayList<TableEntry>());
 
-        manager.sendPacket(routingTable);
+        manager.sendPacket();
         manager.receivePacket();
     }
 
-    public void sendPacket(RoutingTable routingTable) throws InterruptedException {
-        SendPacket sendPacket = new SendPacket(routingTable);
+    public void sendPacket() throws InterruptedException {
+        SendPacket sendPacket = new SendPacket();
         executor.submit(sendPacket);
     }
 

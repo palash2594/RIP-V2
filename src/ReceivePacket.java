@@ -1,3 +1,4 @@
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
@@ -10,13 +11,15 @@ public class ReceivePacket extends Thread {
     public void run() {
         try {
             socket = new MulticastSocket(4446);
-            InetAddress group = InetAddress.getByName(DataStore.getMulticastIP());
+            InetAddress group = InetAddress.getByName(DataStore.MULTICAST_IP);
+            System.out.println(group.toString());
             socket.joinGroup(group);
             while (true) {
                 DatagramPacket packet = new DatagramPacket(buf, buf.length);
                 socket.receive(packet);
-                String received = new String(
+                String receivedPacketString = new String(
                         packet.getData(), 0, packet.getLength());
+                System.out.println(receivedPacketString);
             }
         } catch (IOException e) {
             e.printStackTrace();

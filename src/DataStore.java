@@ -3,8 +3,8 @@ public class DataStore {
     private static int podID;
     private static String podIP;
     private static String podAddress;
-    private static String multicastIP;
     private static RoutingTable routingTable;
+    public final static String MULTICAST_IP = "224.0.0.9";
 
     public static int getPodID() {
         return podID;
@@ -28,14 +28,6 @@ public class DataStore {
 
     public static void setPodAddress(String podAddress) {
         DataStore.podAddress = podAddress;
-    }
-
-    public static String getMulticastIP() {
-        return multicastIP;
-    }
-
-    public static void setMulticastIP(String multicastIP) {
-        DataStore.multicastIP = multicastIP;
     }
 
     public static RoutingTable getRoutingTable() {
