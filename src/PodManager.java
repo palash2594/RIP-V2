@@ -30,7 +30,7 @@ public class PodManager {
         executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(noOfProcessors);
 
         RoutingTable routingTable = new RoutingTable(new ArrayList<TableEntry>());
-
+        // send packet
         manager.sendPacket();
         manager.receivePacket();
     }
