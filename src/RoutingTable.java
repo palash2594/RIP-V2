@@ -1,7 +1,7 @@
 import java.util.List;
 
 public class RoutingTable {
-    private List<TableEntry> routingTable;
+    private static List<TableEntry> routingTable;
 
     public RoutingTable(List<TableEntry> routingTable) {
         this.routingTable = routingTable;
@@ -19,11 +19,18 @@ public class RoutingTable {
         routingTable.add(entry);
     }
 
-    public void prepareRoutingTableToSend() {
+    public static String prepareRoutingTableToSend(int count) {
         String routingTableString = "";
-        for (int i = 0; i  < routingTable.size(); i++) {
-            TableEntry currentEntry = routingTable.get(i);
-
+        // checking if this is not the first packet to be sent.
+        if (count >= 1) {
+            for (int i = 0; i < routingTable.size(); i++) {
+                TableEntry currentEntry = routingTable.get(i);
+                routingTableString += currentEntry.getAddress() + "--";
+                routingTableString += currentEntry.getNextHop() + "--";
+                routingTableString += currentEntry.getCost() + "--";
+                routingTableString += currentEntry.getTime() + "---";
+            }
         }
+        return DataStore.getPodID() + "-" + DataStore.getPodAddress() + "-" + DataStore.getPodIP() + "-" + routingTableString;
     }
 }

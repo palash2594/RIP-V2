@@ -14,7 +14,7 @@ public class DataStore {
         DataStore.podID = podID;
     }
 
-    public static String getPodIP(String podIP) {
+    public static String getPodIP() {
         return DataStore.podIP;
     }
 

@@ -2,6 +2,7 @@ import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -31,12 +32,14 @@ public class PodManager {
         int noOfProcessors = Runtime.getRuntime().availableProcessors();
         executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(noOfProcessors);
 
-        manager.sendPacket();
+        RoutingTable routingTable = new RoutingTable(new ArrayList<TableEntry>());
+
+        manager.sendPacket(routingTable);
         manager.receivePacket();
     }
 
-    public void sendPacket() throws InterruptedException {
-        SendPacket sendPacket = new SendPacket();
+    public void sendPacket(RoutingTable routingTable) throws InterruptedException {
+        SendPacket sendPacket = new SendPacket(routingTable);
         executor.submit(sendPacket);
     }
 

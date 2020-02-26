@@ -15,8 +15,10 @@ public class SendPacket extends Thread {
     public void sendPacket() throws IOException {
         socket = new DatagramSocket();
         group = InetAddress.getByName(DataStore.getMulticastIP());
-        String message = null;
-        buffer = message.getBytes();
+        String ripPacketString = RoutingTable.prepareRoutingTableToSend(count);
+        count ++;
+
+        buffer = ripPacketString.getBytes();
 
         DatagramPacket packet = new DatagramPacket(buffer, buffer.length, group, 4446);
         socket.send(packet);

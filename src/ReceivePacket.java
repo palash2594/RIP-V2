@@ -17,14 +17,13 @@ public class ReceivePacket extends Thread {
                 socket.receive(packet);
                 String received = new String(
                         packet.getData(), 0, packet.getLength());
-                if ("end".equals(received)) {
-                    break;
-                }
             }
-            socket.leaveGroup(group);
-            socket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public synchronized void updateRoutingTable(String routingTableString) {
+        // TODO: 2/25/20 parse routing table string
     }
 }
