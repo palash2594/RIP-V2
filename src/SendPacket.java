@@ -14,7 +14,7 @@ public class SendPacket extends Thread {
     private int count = 1; // if count if zero that means request command will be used.
 
     public void sendPacket() throws IOException {
-        System.out.println("Inside send packet.");
+//        System.out.println("Inside send packet.");
         socket = new DatagramSocket();
         group = InetAddress.getByName(DataStore.MULTICAST_IP);
 //        String ripPacketString = RoutingTable.prepareRoutingTableToSend(count);

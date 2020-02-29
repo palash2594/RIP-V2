@@ -1,7 +1,9 @@
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
+import java.util.Map;
 
 public class ReceivePacket extends Thread {
     protected MulticastSocket socket = null;
@@ -22,7 +24,7 @@ public class ReceivePacket extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("Receive end.");
+//        System.out.println("Receive end.");
     }
 
     public synchronized void updateRoutingTable(byte[] receivedPacket, int length) {
@@ -36,6 +38,22 @@ public class ReceivePacket extends Thread {
         RoutingTable receivedRoutingTable = ripPacket.readPacket(receivedPacket, length);
         System.out.println("*****inside update routing.*****");
 
+        Map<String, TableEntry> myRoutingTable = DataStore.getRoutingTable().getRoutingTable();
+
+        try {
+            for (Map.Entry<String, TableEntry> entry : receivedRoutingTable.getRoutingTable().entrySet()) {
+                if (!myRoutingTable.containsKey(entry.getKey())) {
+                    TableEntry currentTableEntry = entry.getValue();
+                    System.out.println("My id " + DataStore.getPodID() + " Received addr: " + currentTableEntry.getAddress());
+                    currentTableEntry.setCost(currentTableEntry.getCost() + 1);
+                    myRoutingTable.put(entry.getKey(), currentTableEntry);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        DataStore.setRoutingTable(new RoutingTable(myRoutingTable));
 
     }
 }

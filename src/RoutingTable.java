@@ -1,23 +1,25 @@
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class RoutingTable {
-    private List<TableEntry> routingTable;
+//    private List<TableEntry> routingTable;
+    private Map<String, TableEntry> routingTable;
 
-    public RoutingTable(List<TableEntry> routingTable) {
+    public RoutingTable(Map<String, TableEntry> routingTable) {
         this.routingTable = routingTable;
     }
 
-    public List<TableEntry> getRoutingTable() {
+    public Map<String, TableEntry> getRoutingTable() {
         return routingTable;
     }
 
-    public void setRoutingTable(List<TableEntry> routingTable) {
+    public void setRoutingTable(Map<String, TableEntry> routingTable) {
         this.routingTable = routingTable;
     }
 
-    public void addEntry(TableEntry entry) {
-        routingTable.add(entry);
+    public void addEntry(String podAddress, TableEntry entry) {
+        routingTable.put(podAddress, entry);
     }
 
     public String prepareRoutingTableToSend(int count) {

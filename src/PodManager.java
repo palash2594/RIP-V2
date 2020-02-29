@@ -4,6 +4,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -17,7 +19,7 @@ public class PodManager {
 
     public void initialization(int podID) throws UnknownHostException {
         DataStore.setPodID(podID);
-        String podAddress = "10.0." + podID + ".0/24";
+        String podAddress = "10.0." + podID + ".0";
         DataStore.setPodAddress(podAddress);
 
         String podIP = InetAddress.getLocalHost().getHostAddress().trim();
@@ -29,11 +31,11 @@ public class PodManager {
         executor = DataStore.getExecutor();
 
         // initializing the routing table.
-        RoutingTable routingTable = new RoutingTable(new ArrayList<TableEntry>());
+        RoutingTable routingTable = new RoutingTable(new HashMap<String, TableEntry>());
         DataStore.setRoutingTable(routingTable);
 
         TableEntry tableEntry = new TableEntry(podAddress, podIP, 0, new Date().getTime());
-        DataStore.getRoutingTable().addEntry(tableEntry);
+        DataStore.getRoutingTable().addEntry(podAddress, tableEntry);
 
     }
 

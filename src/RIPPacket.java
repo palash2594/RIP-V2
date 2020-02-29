@@ -1,6 +1,5 @@
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import javax.print.DocFlavor;
+import java.util.*;
 
 public class RIPPacket {
 
@@ -39,9 +38,9 @@ public class RIPPacket {
 
     public byte[] preparePacket(int command) {
 
-        List<TableEntry> routingTable = DataStore.getRoutingTable().getRoutingTable();
+        Map<String, TableEntry> routingTable = DataStore.getRoutingTable().getRoutingTable();
         int myID = DataStore.getPodID();
-        String[] myIP = DataStore.getPodIP().split(".");
+        String[] myIP = DataStore.getPodIP().split("\\.");
         // size of routing table.
         int size = routingTable.size();
 
@@ -65,10 +64,10 @@ public class RIPPacket {
 
         System.out.println("routing table size: " + routingTable.size());
         // routing table.
-        for (int i = 0; i < routingTable.size(); i++) {
-            TableEntry currentEntry = routingTable.get(i);
-            String[] address = currentEntry.getAddress().split(".");
-            String[] nextHop = currentEntry.getNextHop().split(".");
+        for (Map.Entry<String, TableEntry> entry : routingTable.entrySet()) {
+            TableEntry currentEntry = entry.getValue();
+            String[] address = currentEntry.getAddress().split("\\.");
+            String[] nextHop = currentEntry.getNextHop().split("\\.");
             int cost = currentEntry.getCost();
             for (String add : address) {
                 packetInBytes[counter++] = (byte) Integer.parseInt(add);
@@ -79,11 +78,12 @@ public class RIPPacket {
             packetInBytes[counter++] = (byte) cost;
             // no need to send the time.
         }
+        System.out.println("here");
         return packetInBytes;
     }
 
     public RoutingTable readPacket(byte[] packet, int length) {
-        List<TableEntry> listEntry = new ArrayList<>();
+        Map<String, TableEntry> listEntry = new HashMap<>();
         RoutingTable receivedRoutingTable = new RoutingTable(listEntry);
 
         int counter = 0;
@@ -106,22 +106,23 @@ public class RIPPacket {
                 for (int i = 0; i < 4; i++) {
                     address += (packet[counter++] & 0xff) + ".";
                 }
-                address += address.substring(0, address.length() - 1);
+                address = address.substring(0, address.length() - 1);
+                System.out.println("received address: " + address);
 
                 String nextHop = "";
                 for (int i = 0; i < 4; i++) {
                     nextHop += (packet[counter++] & 0xff) + ".";
                 }
 //                System.out.println(counter);
-                nextHop += nextHop.substring(0, nextHop.length() - 1);
+                nextHop = nextHop.substring(0, nextHop.length() - 1);
 
                 int cost = packet[counter++] & 0xff;
                 Date date = new Date();
                 TableEntry currentEntry = new TableEntry(address, nextHop, cost, date.getTime());
-                receivedRoutingTable.addEntry(currentEntry);
+                receivedRoutingTable.addEntry(address, currentEntry);
             }
         }
         System.out.println("*****inside read packet*****");
-        return routingTable;
+        return receivedRoutingTable;
     }
 }
