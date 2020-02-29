@@ -1,38 +1,52 @@
-import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
 public class PodManager {
 
-    private static ThreadPoolExecutor executor;
     private RoutingTable routingTable;
     private DatagramSocket socket = null;
     private InetAddress group;
     private byte[] buffer;
+    private static ThreadPoolExecutor executor;
 
-
-    public static void main(String[] args) throws IOException, InterruptedException {
-        int podID = Integer.parseInt(args[0]);
+    public void initialization(int podID) throws UnknownHostException {
         DataStore.setPodID(podID);
+        String podAddress = "10.0." + podID + ".0/24";
+        DataStore.setPodAddress(podAddress);
 
         String podIP = InetAddress.getLocalHost().getHostAddress().trim();
         DataStore.setPodIP(podIP);
 
-        String podAddress = "10.0." + podID + ".0/24";
-        DataStore.setPodAddress(podAddress);
-
-        PodManager manager = new PodManager();
         int noOfProcessors = Runtime.getRuntime().availableProcessors();
-        executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(noOfProcessors);
+        // Setting the Threadpool executor.
+        DataStore.setExecutor((ThreadPoolExecutor) Executors.newFixedThreadPool(noOfProcessors));
+        executor = DataStore.getExecutor();
 
+        // initializing the routing table.
         RoutingTable routingTable = new RoutingTable(new ArrayList<TableEntry>());
-        // send packet
-        manager.sendPacket();
-        manager.receivePacket();
+        DataStore.setRoutingTable(routingTable);
+
+        TableEntry tableEntry = new TableEntry(podAddress, podIP, 0, new Date().getTime());
+        DataStore.getRoutingTable().addEntry(tableEntry);
+
+    }
+
+    public static void main(String[] args) throws IOException, InterruptedException {
+        PodManager podManager = new PodManager();
+
+        podManager.initialization(Integer.parseInt(args[0]));
+
+        // starting send packet thread.
+        podManager.sendPacket();
+
+        // starting receive packet thread.
+        podManager.receivePacket();
     }
 
     public void sendPacket() throws InterruptedException {

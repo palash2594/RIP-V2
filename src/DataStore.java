@@ -1,3 +1,5 @@
+import java.util.concurrent.ThreadPoolExecutor;
+
 public class DataStore {
 
     private static int podID;
@@ -5,6 +7,7 @@ public class DataStore {
     private static String podAddress;
     private static RoutingTable routingTable;
     public final static String MULTICAST_IP = "224.0.0.9";
+    private static ThreadPoolExecutor executor;
 
     public static int getPodID() {
         return podID;
@@ -36,5 +39,13 @@ public class DataStore {
 
     public static void setRoutingTable(RoutingTable routingTable) {
         DataStore.routingTable = routingTable;
+    }
+
+    public static ThreadPoolExecutor getExecutor() {
+        return executor;
+    }
+
+    public static void setExecutor(ThreadPoolExecutor executor) {
+        DataStore.executor = executor;
     }
 }

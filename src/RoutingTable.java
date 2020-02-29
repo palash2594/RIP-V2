@@ -1,7 +1,8 @@
 import java.util.List;
+import java.util.Map;
 
 public class RoutingTable {
-    private static List<TableEntry> routingTable;
+    private List<TableEntry> routingTable;
 
     public RoutingTable(List<TableEntry> routingTable) {
         this.routingTable = routingTable;
@@ -19,7 +20,7 @@ public class RoutingTable {
         routingTable.add(entry);
     }
 
-    public static String prepareRoutingTableToSend(int count) {
+    public String prepareRoutingTableToSend(int count) {
         String routingTableString = "";
         // checking if this is not the first packet to be sent.
         if (count >= 1) {

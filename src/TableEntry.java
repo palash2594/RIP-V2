@@ -1,10 +1,10 @@
 public class TableEntry {
     private String address;
     private String nextHop;
-    private String cost;
-    private String time; // TODO: 2/25/20 change the datatype
+    private int cost;
+    private long time; // TODO: 2/25/20 change the datatype
 
-    public TableEntry(String address, String nextHop, String cost, String time) {
+    public TableEntry(String address, String nextHop, int cost, long time) {
         this.address = address;
         this.nextHop = nextHop;
         this.cost = cost;
@@ -27,19 +27,19 @@ public class TableEntry {
         this.nextHop = nextHop;
     }
 
-    public String getCost() {
+    public int getCost() {
         return cost;
     }
 
-    public void setCost(String cost) {
+    public void setCost(int cost) {
         this.cost = cost;
     }
 
-    public String getTime() {
+    public long getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(long time) {
         this.time = time;
     }
 }
