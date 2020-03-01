@@ -1,4 +1,3 @@
-import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
@@ -54,6 +53,19 @@ public class ReceivePacket extends Thread {
         }
 
         DataStore.setRoutingTable(new RoutingTable(myRoutingTable));
+        displayRoutingTable(myRoutingTable);
 
+    }
+
+    public void displayRoutingTable(Map<String, TableEntry> routingTable) {
+        System.out.println("Routing table:");
+        System.out.println("Address\t  |\t Next Hop\t| Cost\t| Time");
+        for (Map.Entry<String, TableEntry> entry : routingTable.entrySet()) {
+            TableEntry currentEntry = entry.getValue();
+            System.out.print(currentEntry.getAddress() + "  |\t");
+            System.out.print(currentEntry.getNextHop() + "\t| ");
+            System.out.print(currentEntry.getCost() + "\t| ");
+            System.out.println(currentEntry.getTime());
+        }
     }
 }

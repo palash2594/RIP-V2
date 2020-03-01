@@ -1,4 +1,3 @@
-import javax.print.DocFlavor;
 import java.util.*;
 
 public class RIPPacket {
@@ -113,7 +112,6 @@ public class RIPPacket {
                 for (int i = 0; i < 4; i++) {
                     nextHop += (packet[counter++] & 0xff) + ".";
                 }
-//                System.out.println(counter);
                 nextHop = nextHop.substring(0, nextHop.length() - 1);
 
                 int cost = packet[counter++] & 0xff;

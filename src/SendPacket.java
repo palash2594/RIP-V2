@@ -2,8 +2,6 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.security.spec.RSAOtherPrimeInfo;
-import java.util.Arrays;
 
 public class SendPacket extends Thread {
 
