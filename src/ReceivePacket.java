@@ -34,13 +34,14 @@ public class ReceivePacket extends Thread {
         RIPPacket ripPacket = new RIPPacket();
         // Parsing packet to get the routing table.
         RoutingTable receivedRoutingTable = ripPacket.readPacket(receivedPacket, length);
+        String receivedIP = ripPacket.getIP(receivedPacket);
         System.out.println("*****inside update routing.*****");
 
-        updateRoutingTable(receivedRoutingTable);
+        updateRoutingTable(receivedRoutingTable, receivedIP);
 
     }
 
-    public void updateRoutingTable(RoutingTable receivedRoutingTable) {
+    public void updateRoutingTable(RoutingTable receivedRoutingTable, String receivedIP) {
         Map<String, TableEntry> myRoutingTable = DataStore.getRoutingTable().getRoutingTable();
         boolean triggerFlag = false;
         try {
@@ -56,8 +57,9 @@ public class ReceivePacket extends Thread {
                     int newCost = currentTableEntry.getCost() + 1;
 //                    myRoutingTable.get(entry.getKey()).setTime(System.currentTimeMillis());
                     // checking if the new cost is lower than the previous cost.
-                    if (newCost < myRoutingTable.get(entry.getKey()).getCost() ) {
+                    if (newCost < myRoutingTable.get(entry.getKey()).getCost()) {
                         myRoutingTable.get(entry.getKey()).setCost(newCost);
+                        myRoutingTable.get(entry.getKey()).setNextHop(receivedIP);
                         triggerFlag = true;
                     }
                 }

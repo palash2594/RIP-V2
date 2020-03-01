@@ -1,4 +1,3 @@
-import javax.xml.crypto.Data;
 import java.util.*;
 
 public class RIPPacket {
@@ -127,5 +126,18 @@ public class RIPPacket {
         }
         System.out.println("*****inside read packet*****");
         return receivedRoutingTable;
+    }
+
+    public String getIP(byte[] packet) {
+
+        int counter = 4;
+        String podIP = "";
+
+        for (int i = 0; i < 4; i++) {
+            podIP += (packet[counter++] & 0xff) + ".";
+        }
+        podIP = podIP.substring(0, podIP.length() - 1); // removing the last dot (.).
+
+        return podIP;
     }
 }
