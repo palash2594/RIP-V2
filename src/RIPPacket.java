@@ -102,6 +102,8 @@ public class RIPPacket {
         } else {
             // response
             String podAddress = "10.0." + podID + ".0";
+
+            // updating time in routing table to the current time.
             if (myRoutingTable.getRoutingTable().containsKey(podAddress)) {
                 DataStore.getRoutingTable().getRoutingTable().get("10.0." + podID + ".0").setTime(System.currentTimeMillis());
             }

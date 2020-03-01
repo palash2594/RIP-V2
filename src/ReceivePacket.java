@@ -48,6 +48,12 @@ public class ReceivePacket extends Thread {
             for (Map.Entry<String, TableEntry> entry : receivedRoutingTable.getRoutingTable().entrySet()) {
                 TableEntry currentTableEntry = entry.getValue();
 
+                String currentEntryAddress = currentTableEntry.getAddress();
+
+                if (!DataStore.getAddressToIPMapping().containsKey(currentEntryAddress)) {
+                    DataStore.getAddressToIPMapping().put(currentEntryAddress, receivedIP);
+                }
+
                 // new entry.
                 if (!myRoutingTable.containsKey(entry.getKey())) {
                     currentTableEntry.setCost(currentTableEntry.getCost() + 1);
@@ -55,11 +61,22 @@ public class ReceivePacket extends Thread {
                 } else { // existing entry.
                     // calculating new cost.
                     int newCost = currentTableEntry.getCost() + 1;
-//                    myRoutingTable.get(entry.getKey()).setTime(System.currentTimeMillis());
+
+                    // TODO: 3/1/20 changing cost to the cost received by via node to destination node.
+                    if (myRoutingTable.get(currentTableEntry.getAddress()).getNextHop().equals(receivedIP)) {
+                        if (newCost == 17) {
+                            myRoutingTable.get(currentEntryAddress).setNextHop("0.0.0.0");
+                            myRoutingTable.get(currentEntryAddress).setCost(16);
+                        }
+                        myRoutingTable.get(entry.getKey()).setCost(newCost);
+                        continue;
+                    }
+
                     // checking if the new cost is lower than the previous cost.
                     if (newCost < myRoutingTable.get(entry.getKey()).getCost()) {
                         myRoutingTable.get(entry.getKey()).setCost(newCost);
                         myRoutingTable.get(entry.getKey()).setNextHop(receivedIP);
+
                         triggerFlag = true;
                     }
                 }

@@ -35,6 +35,8 @@ public class PodManager {
         TableEntry tableEntry = new TableEntry(podAddress, podIP, 0, new Date().getTime());
         DataStore.getRoutingTable().addEntry(podAddress, tableEntry);
 
+        DataStore.setAddressToIPMapping(new HashMap<>());
+
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {

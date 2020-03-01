@@ -1,3 +1,4 @@
+import java.util.Map;
 import java.util.concurrent.ThreadPoolExecutor;
 
 public class DataStore {
@@ -6,6 +7,7 @@ public class DataStore {
     private static String podIP;
     private static String podAddress;
     private static RoutingTable routingTable;
+    private static Map<String, String> addressToIPMapping;
     public final static String MULTICAST_IP = "224.0.0.9";
     private static ThreadPoolExecutor executor;
 
@@ -39,6 +41,14 @@ public class DataStore {
 
     public static void setRoutingTable(RoutingTable routingTable) {
         DataStore.routingTable = routingTable;
+    }
+
+    public static Map<String, String> getAddressToIPMapping() {
+        return addressToIPMapping;
+    }
+
+    public static void setAddressToIPMapping(Map<String, String> addressToIPMapping) {
+        DataStore.addressToIPMapping = addressToIPMapping;
     }
 
     public static ThreadPoolExecutor getExecutor() {
