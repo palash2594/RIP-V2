@@ -115,8 +115,7 @@ public class RIPPacket {
                 nextHop = nextHop.substring(0, nextHop.length() - 1);
 
                 int cost = packet[counter++] & 0xff;
-                Date date = new Date();
-                TableEntry currentEntry = new TableEntry(address, nextHop, cost, date.getTime());
+                TableEntry currentEntry = new TableEntry(address, nextHop, cost, System.currentTimeMillis());
                 receivedRoutingTable.addEntry(address, currentEntry);
             }
         }

@@ -47,6 +47,10 @@ public class PodManager {
 
         // starting receive packet thread.
         podManager.receivePacket();
+
+        //starting timeout checking thread.
+        podManager.checkTimeouts();
+
     }
 
     public void sendPacket() throws InterruptedException {
@@ -57,6 +61,11 @@ public class PodManager {
     public void receivePacket() {
         ReceivePacket receivePacket = new ReceivePacket();
         executor.submit(receivePacket);
+    }
+
+    public void checkTimeouts() {
+        CheckTimeouts checkTimeouts = new CheckTimeouts();
+        executor.execute(checkTimeouts);
     }
 
 }
