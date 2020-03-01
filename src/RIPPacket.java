@@ -1,3 +1,4 @@
+import javax.xml.crypto.Data;
 import java.util.*;
 
 public class RIPPacket {
@@ -84,6 +85,7 @@ public class RIPPacket {
     public RoutingTable readPacket(byte[] packet, int length) {
         Map<String, TableEntry> listEntry = new HashMap<>();
         RoutingTable receivedRoutingTable = new RoutingTable(listEntry);
+        RoutingTable myRoutingTable = DataStore.getRoutingTable();
 
         int counter = 0;
         int command = packet[counter++] & 0xff;
@@ -100,6 +102,10 @@ public class RIPPacket {
             // request
         } else {
             // response
+            String podAddress = "10.0." + podID + ".0";
+            if (myRoutingTable.getRoutingTable().containsKey(podAddress)) {
+                DataStore.getRoutingTable().getRoutingTable().get("10.0." + podID + ".0").setTime(System.currentTimeMillis());
+            }
             while (counter < length) {
                 String address = "";
                 for (int i = 0; i < 4; i++) {

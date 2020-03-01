@@ -2,7 +2,7 @@ import java.util.Map;
 
 public class CheckTimeouts extends Thread {
 
-    private final int TEN_SECONDS = 11;
+    private final int TEN_SECONDS = 10;
     private final int INFINITY = 16;
 
     public void run() {

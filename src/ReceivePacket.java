@@ -54,7 +54,7 @@ public class ReceivePacket extends Thread {
                 } else { // existing entry.
                     // calculating new cost.
                     int newCost = currentTableEntry.getCost() + 1;
-                    myRoutingTable.get(entry.getKey()).setTime(System.currentTimeMillis());
+//                    myRoutingTable.get(entry.getKey()).setTime(System.currentTimeMillis());
                     // checking if the new cost is lower than the previous cost.
                     if (newCost < myRoutingTable.get(entry.getKey()).getCost() ) {
                         myRoutingTable.get(entry.getKey()).setCost(newCost);
@@ -74,7 +74,7 @@ public class ReceivePacket extends Thread {
 
     public void displayRoutingTable() {
         Map<String, TableEntry> routingTable = DataStore.getRoutingTable().getRoutingTable();
-        System.out.println("Routing table:");
+        System.out.println("Routing table for node : " + DataStore.getPodID());
         System.out.println("|-------------------------------------------------------|");
         System.out.println("| Address\t| Next Hop\t| Cost\t| Time\t\t|");
         System.out.println("|-------------------------------------------------------|");
