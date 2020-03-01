@@ -18,54 +18,73 @@ public class ReceivePacket extends Thread {
                 socket.receive(packet);
                 System.out.println("Packet length: " + packet.getLength());
                 System.out.println("Received packet from: " + packet.getData()[3]);
-                updateRoutingTable(packet.getData(), packet.getLength());
+                extractRoutingTable(packet.getData(), packet.getLength());
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        System.out.println("Receive end.");
     }
 
-    public synchronized void updateRoutingTable(byte[] receivedPacket, int length) {
-        // TODO: 2/25/20 parse routing table string
+    public synchronized void extractRoutingTable(byte[] receivedPacket, int length) {
         int podID = DataStore.getPodID();
         if ((receivedPacket[3] & 0xff) == podID) {
             // packet is it's own.
             return;
         }
         RIPPacket ripPacket = new RIPPacket();
+        // Parsing packet to get the routing table.
         RoutingTable receivedRoutingTable = ripPacket.readPacket(receivedPacket, length);
         System.out.println("*****inside update routing.*****");
 
+        updateRoutingTable(receivedRoutingTable);
+
+    }
+
+    public void updateRoutingTable(RoutingTable receivedRoutingTable) {
         Map<String, TableEntry> myRoutingTable = DataStore.getRoutingTable().getRoutingTable();
+        boolean triggerFlag = false;
 
         try {
             for (Map.Entry<String, TableEntry> entry : receivedRoutingTable.getRoutingTable().entrySet()) {
+                TableEntry currentTableEntry = entry.getValue();
+
+                // new entry.
                 if (!myRoutingTable.containsKey(entry.getKey())) {
-                    TableEntry currentTableEntry = entry.getValue();
-                    System.out.println("My id " + DataStore.getPodID() + " Received addr: " + currentTableEntry.getAddress());
                     currentTableEntry.setCost(currentTableEntry.getCost() + 1);
                     myRoutingTable.put(entry.getKey(), currentTableEntry);
+                } else { // existing entry.
+                    // calculating new cost.
+                    int newCost = currentTableEntry.getCost() + 1;
+                    // checking if the new cost is lower than the previous cost.
+                    if (newCost < myRoutingTable.get(entry.getKey()).getCost() ) {
+                        myRoutingTable.get(entry.getKey()).setCost(newCost);
+                        triggerFlag = true;
+                    }
                 }
             }
         } catch (Exception e) {
             System.out.println(e);
         }
-
-        DataStore.setRoutingTable(new RoutingTable(myRoutingTable));
         displayRoutingTable(myRoutingTable);
 
+        if (triggerFlag) {
+            // TODO: 2/29/20 send triggered update.
+        }
     }
 
     public void displayRoutingTable(Map<String, TableEntry> routingTable) {
         System.out.println("Routing table:");
-        System.out.println("Address\t  |\t Next Hop\t| Cost\t| Time");
+        System.out.println("|-------------------------------------------------------|");
+        System.out.println("| Address\t| Next Hop\t| Cost\t| Time\t\t|");
+        System.out.println("|-------------------------------------------------------|");
         for (Map.Entry<String, TableEntry> entry : routingTable.entrySet()) {
             TableEntry currentEntry = entry.getValue();
-            System.out.print(currentEntry.getAddress() + "  |\t");
+            System.out.print("| " + currentEntry.getAddress() + "  \t| ");
             System.out.print(currentEntry.getNextHop() + "\t| ");
             System.out.print(currentEntry.getCost() + "\t| ");
-            System.out.println(currentEntry.getTime());
+            System.out.println(currentEntry.getTime() + "\t|");
         }
+        System.out.println("|-------------------------------------------------------|");
     }
+
 }
