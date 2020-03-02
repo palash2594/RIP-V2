@@ -103,7 +103,7 @@ public class RIPPacket {
             // response
             String podAddress = "10.0." + podID + ".0";
 
-
+            // removing it from the map because we get a packet from that node.
             DataStore.getNonRechableDirectly().remove("10.0." + podID + ".0");
 
             // updating time in routing table to the current time.

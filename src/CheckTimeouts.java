@@ -7,6 +7,8 @@ public class CheckTimeouts extends Thread {
     private final int INFINITY = 16;
 
     public void run() {
+        // storing nodes in this to not set its cost to 16 again.
+        // storing only those nodes who are not directly reachable.
         Map<String, Boolean> nonRechableDirectly = DataStore.getNonRechableDirectly();
         try {
             Map<String, TableEntry> myRoutingTable = DataStore.getRoutingTable().getRoutingTable();
@@ -18,6 +20,7 @@ public class CheckTimeouts extends Thread {
                     if (!entry.getValue().getAddress().equals(myAddress)) {
                         TableEntry currentEntry = entry.getValue();
 
+                        // consider only those who have exceeded 10 seconds and it is already not been considered
                         if (((System.currentTimeMillis() - currentEntry.getTime()) / 1000) > TEN_SECONDS && !nonRechableDirectly.containsKey(currentEntry.getAddress())) {
                             nonRechableDirectly.put(currentEntry.getAddress(), true);
                             currentEntry.setCost(INFINITY);

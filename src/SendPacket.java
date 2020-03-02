@@ -19,7 +19,7 @@ public class SendPacket extends Thread {
         RIPPacket ripPacket = new RIPPacket();
         byte[] packetToSend = ripPacket.preparePacket(count);
 //        System.out.println(ripPacketString);
-        count ++;
+        count++;
 
 //        buffer = packetToSend;
 //        System.out.println(Arrays.toString(buffer));
@@ -30,7 +30,7 @@ public class SendPacket extends Thread {
 
     public void run() {
         try {
-            while(true) {
+            while (true) {
                 sendPacket();
 //                System.out.println("inside run function.");
                 sleep(5000);
