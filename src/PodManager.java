@@ -1,5 +1,4 @@
 import java.io.IOException;
-import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Date;
@@ -9,10 +8,6 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 public class PodManager {
 
-    private RoutingTable routingTable;
-    private DatagramSocket socket = null;
-    private InetAddress group;
-    private byte[] buffer;
     private static ThreadPoolExecutor executor;
 
     public void initialization(int podID) throws UnknownHostException {

@@ -1,8 +1,12 @@
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ThreadPoolExecutor;
 
 public class DataStore {
+
+    public final static String MULTICAST_IP = "224.0.0.9";
+    public final static int INFINITY = 16;
+    public final static int TEN_SECONDS = 10;
+    public final static String DEFAULT_IP = "0.0.0.0";
 
     private static int podID;
     private static String podIP;
@@ -10,7 +14,6 @@ public class DataStore {
     private static RoutingTable routingTable;
     private static Map<String, String> addressToIPMapping;
     private static Map<String, Boolean> nonRechableDirectly;
-    public final static String MULTICAST_IP = "224.0.0.9";
     private static ThreadPoolExecutor executor;
 
     public static int getPodID() {

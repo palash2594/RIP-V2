@@ -59,7 +59,9 @@ public class ReceivePacket extends Thread {
 
                 // new entry.
                 if (!myRoutingTable.containsKey(entry.getKey())) {
-                    if (currentTableEntry.getCost() != 16) {
+                    if (currentTableEntry.getCost() != DataStore.INFINITY) {
+                        // setting next hop ip to the ip of the sending node (receivedIP)
+                        currentTableEntry.setNextHop(receivedIP);
                         currentTableEntry.setCost(newCost);
                     }
                     myRoutingTable.put(entry.getKey(), currentTableEntry);
@@ -67,12 +69,13 @@ public class ReceivePacket extends Thread {
 
                     // TODO: 3/1/20 changing cost to the cost received by via node to destination node.
                     if (myRoutingTable.get(currentTableEntry.getAddress()).getNextHop().equals(receivedIP)) {
-                        if (newCost >= 17) {
-                            myRoutingTable.get(currentEntryAddress).setNextHop("0.0.0.0");
-                            myRoutingTable.get(currentEntryAddress).setCost(16);
+                        if (newCost >= DataStore.INFINITY + 1) {
+                            myRoutingTable.get(currentEntryAddress).setNextHop(DataStore.DEFAULT_IP);
+                            myRoutingTable.get(currentEntryAddress).setCost(DataStore.INFINITY);
                             continue;
                         }
                         myRoutingTable.get(entry.getKey()).setCost(newCost);
+                        myRoutingTable.get(entry.getKey()).setTime(System.currentTimeMillis());
                         continue;
                     }
 
@@ -80,6 +83,7 @@ public class ReceivePacket extends Thread {
                     if (newCost < myRoutingTable.get(entry.getKey()).getCost()) {
                         myRoutingTable.get(entry.getKey()).setCost(newCost);
                         myRoutingTable.get(entry.getKey()).setNextHop(receivedIP);
+                        myRoutingTable.get(entry.getKey()).setTime(System.currentTimeMillis());
 
                         triggerFlag = true;
                     }

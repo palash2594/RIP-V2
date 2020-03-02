@@ -5,10 +5,8 @@ import java.net.InetAddress;
 
 public class SendPacket extends Thread {
 
-    private RoutingTable routingTable;
     private DatagramSocket socket = null;
     private InetAddress group;
-    private byte[] buffer;
     private int count = 1; // if count is one that means request command will be used.
 
     public void sendPacket() throws IOException {
