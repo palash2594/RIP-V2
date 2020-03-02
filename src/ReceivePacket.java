@@ -54,13 +54,16 @@ public class ReceivePacket extends Thread {
                     DataStore.getAddressToIPMapping().put(currentEntryAddress, receivedIP);
                 }
 
+                // calculating new cost.
+                int newCost = currentTableEntry.getCost() + 1;
+
                 // new entry.
                 if (!myRoutingTable.containsKey(entry.getKey())) {
-                    currentTableEntry.setCost(currentTableEntry.getCost() + 1);
+                    if (currentTableEntry.getCost() != 16) {
+                        currentTableEntry.setCost(newCost);
+                    }
                     myRoutingTable.put(entry.getKey(), currentTableEntry);
                 } else { // existing entry.
-                    // calculating new cost.
-                    int newCost = currentTableEntry.getCost() + 1;
 
                     // TODO: 3/1/20 changing cost to the cost received by via node to destination node.
                     if (myRoutingTable.get(currentTableEntry.getAddress()).getNextHop().equals(receivedIP)) {

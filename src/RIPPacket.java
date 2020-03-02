@@ -77,7 +77,6 @@ public class RIPPacket {
             packetInBytes[counter++] = (byte) cost;
             // no need to send the time.
         }
-        System.out.println("here");
         return packetInBytes;
     }
 

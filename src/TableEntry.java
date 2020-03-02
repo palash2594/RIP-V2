@@ -2,7 +2,7 @@ public class TableEntry {
     private String address;
     private String nextHop;
     private int cost;
-    private long time; // TODO: 2/25/20 change the datatype
+    private long time;
 
     public TableEntry(String address, String nextHop, int cost, long time) {
         this.address = address;
