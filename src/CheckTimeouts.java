@@ -7,7 +7,7 @@ public class CheckTimeouts extends Thread {
     private final int INFINITY = 16;
 
     public void run() {
-        Map<String, Boolean> isSet = new HashMap<>();
+        Map<String, Boolean> nonRechableDirectly = DataStore.getNonRechableDirectly();
         try {
             Map<String, TableEntry> myRoutingTable = DataStore.getRoutingTable().getRoutingTable();
             String myAddress = DataStore.getPodAddress();
@@ -18,8 +18,8 @@ public class CheckTimeouts extends Thread {
                     if (!entry.getValue().getAddress().equals(myAddress)) {
                         TableEntry currentEntry = entry.getValue();
 
-                        if (((System.currentTimeMillis() - currentEntry.getTime()) / 1000) > TEN_SECONDS && !isSet.containsKey(currentEntry.getAddress())) {
-                            isSet.put(currentEntry.getAddress(), true);
+                        if (((System.currentTimeMillis() - currentEntry.getTime()) / 1000) > TEN_SECONDS && !nonRechableDirectly.containsKey(currentEntry.getAddress())) {
+                            nonRechableDirectly.put(currentEntry.getAddress(), true);
                             currentEntry.setCost(INFINITY);
                             removeAllUsageOfUnreachableIP(currentEntry.getAddress());
                             receivePacket.displayRoutingTable();

@@ -25,7 +25,7 @@ public class ReceivePacket extends Thread {
         }
     }
 
-    public synchronized void extractRoutingTable(byte[] receivedPacket, int length) {
+    public synchronized void extractRoutingTable(byte[] receivedPacket, int length) throws IOException {
         int podID = DataStore.getPodID();
         if ((receivedPacket[3] & 0xff) == podID) {
             // packet is it's own.
@@ -41,7 +41,7 @@ public class ReceivePacket extends Thread {
 
     }
 
-    public void updateRoutingTable(RoutingTable receivedRoutingTable, String receivedIP) {
+    public void updateRoutingTable(RoutingTable receivedRoutingTable, String receivedIP) throws IOException {
         Map<String, TableEntry> myRoutingTable = DataStore.getRoutingTable().getRoutingTable();
         boolean triggerFlag = false;
         try {
@@ -64,9 +64,10 @@ public class ReceivePacket extends Thread {
 
                     // TODO: 3/1/20 changing cost to the cost received by via node to destination node.
                     if (myRoutingTable.get(currentTableEntry.getAddress()).getNextHop().equals(receivedIP)) {
-                        if (newCost == 17) {
+                        if (newCost >= 17) {
                             myRoutingTable.get(currentEntryAddress).setNextHop("0.0.0.0");
                             myRoutingTable.get(currentEntryAddress).setCost(16);
+                            continue;
                         }
                         myRoutingTable.get(entry.getKey()).setCost(newCost);
                         continue;
@@ -88,6 +89,8 @@ public class ReceivePacket extends Thread {
 
         if (triggerFlag) {
             // TODO: 2/29/20 send triggered update.
+            SendPacket sendPacket = new SendPacket();
+            sendPacket.sendPacket();
         }
     }
 

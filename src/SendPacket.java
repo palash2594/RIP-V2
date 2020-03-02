@@ -9,7 +9,7 @@ public class SendPacket extends Thread {
     private DatagramSocket socket = null;
     private InetAddress group;
     private byte[] buffer;
-    private int count = 1; // if count if zero that means request command will be used.
+    private int count = 1; // if count is one that means request command will be used.
 
     public void sendPacket() throws IOException {
 //        System.out.println("Inside send packet.");
