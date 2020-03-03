@@ -49,7 +49,7 @@ public class CheckTimeouts extends Thread {
                     }
                 }
                 try {
-                    sleep(DataStore.TEN_SECONDS);
+                    sleep(DataStore.TEN_THOUSAND_MILLISECOND);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

@@ -17,6 +17,7 @@ public class DataStore {
     public final static String MULTICAST_IP = "224.0.0.9";
     public final static int INFINITY = 16;
     public final static int TEN_SECONDS = 10;
+    public final static int TEN_THOUSAND_MILLISECOND = 10000;
     public final static String DEFAULT_IP = "0.0.0.0";
 
     private static int podID;
