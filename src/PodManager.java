@@ -1,3 +1,11 @@
+/**
+ * This is the main driver classes which initiates all the threads.
+ *
+ * @author: Palash Jain
+ *
+ * @version: 1.0
+ */
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -11,6 +19,12 @@ public class PodManager {
 
     private static ThreadPoolExecutor executor;
 
+    /**
+     * this method does all the initialization required a beginning of a pod
+     * starting phase.
+     * @param podID
+     * @throws UnknownHostException
+     */
     public void initialization(int podID) throws UnknownHostException {
         DataStore.setPodID(podID);
         String podAddress = "10.0." + podID + ".0";
@@ -37,6 +51,12 @@ public class PodManager {
 
     }
 
+    /**
+     * this is the main function.
+     * @param args
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public static void main(String[] args) throws IOException, InterruptedException {
         PodManager podManager = new PodManager();
 
@@ -53,16 +73,26 @@ public class PodManager {
 
     }
 
+    /**
+     * this method starts a thread to send RIP packet.
+     * @throws InterruptedException
+     */
     public void sendPacket() throws InterruptedException {
         SendPacket sendPacket = new SendPacket();
         executor.submit(sendPacket);
     }
 
+    /**
+     * this method starts thread to receive the RIP packet.
+     */
     public void receivePacket() {
         ReceivePacket receivePacket = new ReceivePacket();
         executor.submit(receivePacket);
     }
 
+    /**
+     * this method starts the thread to check if node went offline or unreachable.
+     */
     public void checkTimeouts() {
         CheckTimeouts checkTimeouts = new CheckTimeouts();
         executor.execute(checkTimeouts);

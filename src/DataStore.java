@@ -1,3 +1,11 @@
+/**
+ * This class contains all the data required globally in the application.
+ *
+ * @author: Palash Jain
+ *
+ * @version: 1.0
+ */
+
 import java.util.Map;
 import java.util.concurrent.ThreadPoolExecutor;
 

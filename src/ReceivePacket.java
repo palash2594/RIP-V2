@@ -1,3 +1,12 @@
+/**
+ * This class receives and decodes the RIP packet containing the routing table
+ * over the multicast channel and updates its routing table accordingly.
+ *
+ * @author: Palash Jain
+ *
+ * @version: 1.0
+ */
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
@@ -8,6 +17,10 @@ public class ReceivePacket extends Thread {
     protected MulticastSocket socket = null;
     protected byte[] buf = new byte[256];
 
+    /**
+     * this run method continuously listens over the multicast channel for the
+     * RIP packet and sends the received packet to update the routing table.
+     */
     public void run() {
         try {
             socket = new MulticastSocket(4446);
@@ -25,6 +38,13 @@ public class ReceivePacket extends Thread {
         }
     }
 
+    /**
+     * this method extracts the routing table from the received RIP packet.
+     * @param receivedPacket
+     * @param length
+     * @param receivedIP
+     * @throws IOException
+     */
     public synchronized void extractRoutingTable(byte[] receivedPacket, int length, String receivedIP) throws IOException {
         if (receivedIP.substring(1).equals(DataStore.getPodIP())) {
             // packet is it's own.
@@ -40,6 +60,12 @@ public class ReceivePacket extends Thread {
 
     }
 
+    /**
+     * this method takes the received routing table and updates its own routing table.
+     * @param receivedRoutingTable
+     * @param receivedIP
+     * @throws IOException
+     */
     public void updateRoutingTable(RoutingTable receivedRoutingTable, String receivedIP) throws IOException {
         Map<String, TableEntry> myRoutingTable = DataStore.getRoutingTable().getRoutingTable();
         boolean triggerFlag = false;
@@ -100,6 +126,9 @@ public class ReceivePacket extends Thread {
         }
     }
 
+    /**
+     * this method displays the routing table.
+     */
     public void displayRoutingTable() {
         Map<String, TableEntry> routingTable = DataStore.getRoutingTable().getRoutingTable();
         System.out.println("Routing table for node : " + DataStore.getPodID());

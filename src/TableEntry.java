@@ -1,3 +1,11 @@
+/**
+ * This POJO class represent a row in the routing table.
+ *
+ * @author: Palash Jain
+ *
+ * @version: 1.0
+ */
+
 public class TableEntry {
     private String address;
     private String nextHop;

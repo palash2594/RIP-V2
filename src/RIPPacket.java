@@ -1,3 +1,11 @@
+/**
+ * This class prepares and read the RIP packet.
+ *
+ * @author: Palash Jain
+ *
+ * @version: 1.0
+ */
+
 import java.util.*;
 
 public class RIPPacket {
@@ -36,6 +44,12 @@ public class RIPPacket {
         this.routingTable = routingTable;
     }
 
+    /**
+     * this method prepares the RIP packet to be sent over the multicast channel.
+     * it also contains the routing table information.
+     * @param command
+     * @return
+     */
     public byte[] preparePacket(int command) {
         Map<String, TableEntry> routingTable = DataStore.getRoutingTable().getRoutingTable();
         int myID = DataStore.getPodID();
@@ -120,6 +134,12 @@ public class RIPPacket {
         return packetInBytes;
     }
 
+    /**
+     * this method read the RIP packet received and extracts the routing table.
+     * @param packet
+     * @param length
+     * @return
+     */
     public RoutingTable readPacket(byte[] packet, int length) {
         Map<String, TableEntry> listEntry = new HashMap<>();
         RoutingTable receivedRoutingTable = new RoutingTable(listEntry);
@@ -211,6 +231,7 @@ public class RIPPacket {
         return receivedRoutingTable;
     }
 
+    // todo: remove this function.
     public String getIP(byte[] packet) {
 
         int counter = 4;

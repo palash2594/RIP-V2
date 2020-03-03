@@ -1,3 +1,12 @@
+/**
+ * This class sends the RIP packet containing the routing table
+ * over the multicast channel.
+ *
+ * @author: Palash Jain
+ *
+ * @version: 1.0
+ */
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -9,6 +18,10 @@ public class SendPacket extends Thread {
     private InetAddress group;
     private int count = 1; // if count is one that means request command will be used.
 
+    /**
+     * this method sends the RIP packet over the multicast channel.
+     * @throws IOException
+     */
     public void sendPacket() throws IOException {
         System.out.println("Inside send packet.");
         socket = new DatagramSocket();
@@ -25,6 +38,9 @@ public class SendPacket extends Thread {
         socket.close();
     }
 
+    /**
+     * this run method calls the sendPacket() method every 5 seconds.
+     */
     public void run() {
         try {
             while (true) {

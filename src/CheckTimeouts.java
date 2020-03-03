@@ -1,7 +1,22 @@
+/**
+ * This class checks the routing table in every 10 seconds to see if any
+ * node has not been updated in last 10 seconds and sets the cost to Infinity.
+ * Infinity is chosen as 16.
+ *
+ * @author: Palash Jain
+ *
+ * @version: 1.0
+ */
+
 import java.util.Map;
 
 public class CheckTimeouts extends Thread {
 
+    /**
+     * this run method checks the routing table in every 10 seconds to see if
+     * a node is unreachable. If a node has no update in the last 10 seconds
+     * then it will set the cost to INFINITY and treat it as unreachable.
+     */
     public void run() {
         // storing nodes in this to not set its cost to INFINITY again.
         // storing only those nodes who are not directly reachable.
@@ -36,6 +51,11 @@ public class CheckTimeouts extends Thread {
         }
     }
 
+    /**
+     * this method removes the usage of every unreachable node in the
+     * routing table.
+     * @param unreachableAddress
+     */
     public void removeAllUsageOfUnreachableIP(String unreachableAddress) {
         String unreachableIP = DataStore.getAddressToIPMapping().get(unreachableAddress);
         Map<String, TableEntry> myRoutingTable = DataStore.getRoutingTable().getRoutingTable();

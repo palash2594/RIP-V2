@@ -1,12 +1,11 @@
-# MulticastTestEnvironment
-A Docker environment for testing networking Java programs
+# Routing Information Protocol (version 2)
+A Docker environment for running and testing the RIP protocol.
 
-This uses the Docker OpenJDK container with added iptables to run Java applications.  A web interface is provided to dynamically block containers from talking with certain other containers as needed for testing.  Although originally designed for testing multicast applications, it can work with any networking java application.
+This uses the Docker OpenJDK container with added iptables to run Java applications.  A web interface is provided to dynamically block containers from talking with certain other containers as needed for testing.
 
-### To build
-This will also build any java files in the current directory in the container.
+### To build docker image 
 
-`docker build -t javaapptest . `
+`docker build -t ripprotocol . `
 
 ### To create the node network
 Only needs to be done once.
@@ -17,10 +16,10 @@ Only needs to be done once.
 ### To Run (for example, node 1)
 This will ultimately run the java Main class as an application.
 
-`docker run -it -p 8080:8080 --cap-add=NET_ADMIN --net nodenet --ip 172.18.0.21 javaapptest 1 `
+`docker run -it -p 8080:8080 --cap-add=NET_ADMIN --net nodenet --ip 172.18.0.21 ripprotocol 1 `
 
 ### To Run (node 2):
-`docker run -it -p 8081:8080 --cap-add=NET_ADMIN --net nodenet --ip 172.18.0.22 javaapptest 2 `
+`docker run -it -p 8081:8080 --cap-add=NET_ADMIN --net nodenet --ip 172.18.0.22 ripprotocol 2 `
 
 ### To Block Nodes 2 and 3 on Node 1
 Using the block=ip http query parameter.
