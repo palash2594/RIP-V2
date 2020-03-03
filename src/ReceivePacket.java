@@ -35,7 +35,7 @@ public class ReceivePacket extends Thread {
      */
     public void run() {
         try {
-            socket = new MulticastSocket(4446);
+            socket = new MulticastSocket(520);
             InetAddress group = InetAddress.getByName(DataStore.MULTICAST_IP);
             socket.joinGroup(group);
             while (true) {

@@ -31,7 +31,7 @@ public class SendPacket extends Thread {
         RIPPacket ripPacket = new RIPPacket();
         byte[] packetToSend = ripPacket.preparePacket(count);
         count++;
-        DatagramPacket packet = new DatagramPacket(packetToSend, packetToSend.length, group, 4446);
+        DatagramPacket packet = new DatagramPacket(packetToSend, packetToSend.length, group, 520);
         socket.send(packet);
         socket.close();
     }
