@@ -3,6 +3,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -24,7 +25,7 @@ public class PodManager {
         executor = DataStore.getExecutor();
 
         // initializing the routing table.
-        RoutingTable routingTable = new RoutingTable(new HashMap<String, TableEntry>());
+        RoutingTable routingTable = new RoutingTable(new ConcurrentHashMap<>());
         DataStore.setRoutingTable(routingTable);
 
         TableEntry tableEntry = new TableEntry(podAddress, podIP, 0, new Date().getTime());
