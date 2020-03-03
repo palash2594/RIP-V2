@@ -18,26 +18,25 @@ public class ReceivePacket extends Thread {
                 socket.receive(packet);
                 System.out.println("Packet length: " + packet.getLength());
                 System.out.println("Received packet from: " + packet.getData()[3]);
-                extractRoutingTable(packet.getData(), packet.getLength());
+                extractRoutingTable(packet.getData(), packet.getLength(), packet.getAddress().toString());
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public synchronized void extractRoutingTable(byte[] receivedPacket, int length) throws IOException {
-        int podID = DataStore.getPodID();
-        if ((receivedPacket[3] & 0xff) == podID) {
+    public synchronized void extractRoutingTable(byte[] receivedPacket, int length, String receivedIP) throws IOException {
+        if (receivedIP.substring(1).equals(DataStore.getPodIP())) {
             // packet is it's own.
             return;
         }
         RIPPacket ripPacket = new RIPPacket();
         // Parsing packet to get the routing table.
         RoutingTable receivedRoutingTable = ripPacket.readPacket(receivedPacket, length);
-        String receivedIP = ripPacket.getIP(receivedPacket);
+//        String receivedIP = ripPacket.getIP(receivedPacket);
         System.out.println("*****inside update routing.*****");
 
-        updateRoutingTable(receivedRoutingTable, receivedIP);
+        updateRoutingTable(receivedRoutingTable, receivedIP.substring(1));
 
     }
 
