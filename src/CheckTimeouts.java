@@ -1,7 +1,4 @@
 /**
- * This class checks the routing table in every 10 seconds to see if any
- * node has not been updated in last 10 seconds and sets the cost to Infinity.
- * Infinity is chosen as 16.
  *
  * @author: Palash Jain
  *
@@ -9,6 +6,17 @@
  */
 
 import java.util.Map;
+
+/**
+ *
+ * This class performs the following fucntions:
+ *  1. Checks the routing table in every 10 seconds to if any node update is
+ *  more than 10 seconds old.
+ *  2. If it finds a node with last updated time more than 10 seconds old,
+ *  then it make it unreachable by setting the cost to infinity (16).
+ *  Then it parses the routing table and removes the reference of all the nodes
+ *  using the old node as next hop, and makes all those nodes unreachable.
+ */
 
 public class CheckTimeouts extends Thread {
 
@@ -31,9 +39,9 @@ public class CheckTimeouts extends Thread {
                     if (!entry.getValue().getAddress().equals(myAddress)) {
                         TableEntry currentEntry = entry.getValue();
 
-                        // consider only those who have exceeded 10 seconds and it is already not been considered
+                        // consider only those nodes who have exceeded 10 seconds.
                         if (((System.currentTimeMillis() - currentEntry.getTime()) / 1000) > DataStore.TEN_SECONDS) {// && !nonRechableDirectly.containsKey(currentEntry.getAddress())) {
-                            nonRechableDirectly.put(currentEntry.getAddress(), true);
+//                            nonRechableDirectly.put(currentEntry.getAddress(), true);
                             currentEntry.setCost(DataStore.INFINITY);
                             removeAllUsageOfUnreachableIP(currentEntry.getAddress());
                             receivePacket.displayRoutingTable();
@@ -41,7 +49,7 @@ public class CheckTimeouts extends Thread {
                     }
                 }
                 try {
-                    sleep(10000);
+                    sleep(DataStore.TEN_SECONDS);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

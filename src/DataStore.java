@@ -1,5 +1,4 @@
 /**
- * This class contains all the data required globally in the application.
  *
  * @author: Palash Jain
  *
@@ -8,6 +7,10 @@
 
 import java.util.Map;
 import java.util.concurrent.ThreadPoolExecutor;
+
+/**
+ * This class maintains all the data required globally in the application.
+ */
 
 public class DataStore {
 

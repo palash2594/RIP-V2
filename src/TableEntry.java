@@ -1,9 +1,12 @@
 /**
- * This POJO class represent a row in the routing table.
  *
  * @author: Palash Jain
  *
  * @version: 1.0
+ */
+
+/**
+ * This POJO class represent a row in the routing table.
  */
 
 public class TableEntry {

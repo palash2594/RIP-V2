@@ -1,5 +1,4 @@
 /**
- * This is the main driver classes which initiates all the threads.
  *
  * @author: Palash Jain
  *
@@ -15,6 +14,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
+/**
+ * This is the main driver classes which initiates all the threads and
+ * initializes the global variables.
+ */
+
 public class PodManager {
 
     private static ThreadPoolExecutor executor;
@@ -26,6 +30,7 @@ public class PodManager {
      * @throws UnknownHostException
      */
     public void initialization(int podID) throws UnknownHostException {
+        System.out.println("Booting up Pod : " + podID);
         DataStore.setPodID(podID);
         String podAddress = "10.0." + podID + ".0";
         DataStore.setPodAddress(podAddress);

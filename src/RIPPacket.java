@@ -1,5 +1,4 @@
 /**
- * This class prepares and read the RIP packet.
  *
  * @author: Palash Jain
  *
@@ -7,6 +6,12 @@
  */
 
 import java.util.*;
+
+/**
+ * This class performs the following tasks:
+ *  1. Prepares an RIP packet containing the routing table information.
+ *  2. Parses over the contents of an RIP packet and prepares routing table.
+ */
 
 public class RIPPacket {
 
@@ -167,10 +172,13 @@ public class RIPPacket {
                     address += (packet[counter++] & 0xff) + ".";
                 }
                 address = address.substring(0, address.length() - 1);
-                System.out.println("received address: " + address);
 
                 // subnet mask.
-                counter += 4;
+                String subnet = "";
+                for (int i = 0; i < 4; i++) {
+                    subnet += (packet[counter++] & 0xff) + ".";
+                }
+                subnet = subnet.substring(0, address.length() - 1);
 
                 // next hop.
                 String nextHop = "";
@@ -227,7 +235,6 @@ public class RIPPacket {
 //                receivedRoutingTable.addEntry(address, currentEntry);
 //            }
 //        }
-        System.out.println("*****inside read packet*****");
         return receivedRoutingTable;
     }
 

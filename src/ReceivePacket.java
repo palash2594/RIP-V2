@@ -1,6 +1,4 @@
 /**
- * This class receives and decodes the RIP packet containing the routing table
- * over the multicast channel and updates its routing table accordingly.
  *
  * @author: Palash Jain
  *
@@ -12,6 +10,20 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.util.Map;
+
+/**
+ * This class receives and decodes the RIP packet containing the routing table
+ * over the multicast channel and updates its routing table accordingly.
+ *
+ * This class performs the following functions:
+ *  1. It always listens for an incoming RIP packet.
+ *  2. After retrieving a packet, it retrieves the contents like sender IP,
+ *  routing table and metric.
+ *  3. It then updates own routing table by checking if any shorter path
+ *  is available.
+ *  4. If any shorter path found then sends a triggered update.
+ *  5. Prints the routing table.
+ */
 
 public class ReceivePacket extends Thread {
     protected MulticastSocket socket = null;
@@ -29,9 +41,10 @@ public class ReceivePacket extends Thread {
             while (true) {
                 DatagramPacket packet = new DatagramPacket(buf, buf.length);
                 socket.receive(packet);
-                System.out.println("Packet length: " + packet.getLength());
-                System.out.println("Received packet from: " + packet.getData()[3]);
-                extractRoutingTable(packet.getData(), packet.getLength(), packet.getAddress().toString());
+//                System.out.println("Packet length: " + packet.getLength());
+//                System.out.println("Received packet from: " + packet.getData()[3]);
+                String receivedIPAddress = packet.getAddress().toString().substring(1);
+                extractRoutingTable(packet.getData(), packet.getLength(), receivedIPAddress);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -46,17 +59,15 @@ public class ReceivePacket extends Thread {
      * @throws IOException
      */
     public synchronized void extractRoutingTable(byte[] receivedPacket, int length, String receivedIP) throws IOException {
-        if (receivedIP.substring(1).equals(DataStore.getPodIP())) {
-            // packet is it's own.
+        if (receivedIP.equals(DataStore.getPodIP())) {
+            // its own packet, ignore.
             return;
         }
         RIPPacket ripPacket = new RIPPacket();
         // Parsing packet to get the routing table.
         RoutingTable receivedRoutingTable = ripPacket.readPacket(receivedPacket, length);
-//        String receivedIP = ripPacket.getIP(receivedPacket);
-        System.out.println("*****inside update routing.*****");
 
-        updateRoutingTable(receivedRoutingTable, receivedIP.substring(1));
+        updateRoutingTable(receivedRoutingTable, receivedIP);
 
     }
 

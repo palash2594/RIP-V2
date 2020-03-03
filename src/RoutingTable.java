@@ -1,5 +1,4 @@
 /**
- * This class contains the routing table implementation.
  *
  * @author: Palash Jain
  *
@@ -7,6 +6,10 @@
  */
 
 import java.util.Map;
+
+/**
+ * This class contains functions to fetch and update a routing table.
+ */
 
 public class RoutingTable {
     private Map<String, TableEntry> routingTable;
